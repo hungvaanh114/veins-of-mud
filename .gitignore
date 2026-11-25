@@ -1,0 +1,15 @@
+# Original download and local export archives
+*.zip
+
+# Python cache and local configuration
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+
+# Local editor and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
