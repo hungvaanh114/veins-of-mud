@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -26,9 +27,24 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload game files
+        id: artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
+      - name: Wait for uploaded artifact to become available
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.artifact.outputs.artifact_id }}
+        run: |
+          for attempt in {1..20}; do
+            if gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" \
+              --jq '.artifacts[].id' | grep -qx "$ARTIFACT_ID"; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Uploaded Pages artifact is not available through the API yet."
+          exit 1
       - name: Publish game
         id: deployment
         uses: actions/deploy-pages@v4
