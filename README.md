@@ -12,16 +12,16 @@ Người chơi chỉ cần mở đường dẫn trên bằng trình duyệt, kh�
 
 Repository: https://github.com/hungvaanh114/veins-of-mud
 
-Workflow `.github/workflows/pages.yml` tự xuất bản toàn bộ `dist/` mỗi khi đẩy thay đổi lên nhánh `main`. Game dùng đường dẫn tài nguyên tương đối nên chạy được dưới đường dẫn `/veins-of-mud/`.
+Nhánh `main` lưu toàn bộ mã nguồn. Nhánh `gh-pages` chỉ chứa nội dung `dist/` và được GitHub Pages phục vụ trực tiếp. Game dùng đường dẫn tài nguyên tương đối nên chạy được dưới đường dẫn `/veins-of-mud/`.
 
-Trong **Settings → Pages → Build and deployment → Source**, chọn **GitHub Actions**. Không chọn thư mục `dist/` trong chế độ Deploy from a branch. Xem tiến trình ở tab **Actions**; khi workflow thành công, dùng đường dẫn chơi game ở trên.
+Trong **Settings → Pages → Build and deployment → Source**, chọn **Deploy from a branch**, nhánh **gh-pages**, thư mục **/(root)**. Xem tiến trình ở tab **Actions**; khi xuất bản thành công, dùng đường dẫn chơi game ở trên.
 
 Để cập nhật sau khi sửa game:
 
 ```powershell
-git add dist art tools README.md .github .gitignore .gitattributes
+git add dist art tools README.md .gitignore .gitattributes
 git commit -m "Update game"
-git push
+powershell -ExecutionPolicy Bypass -File tools/publish.ps1
 ```
 
 Nếu muốn cập nhật cả bản ngoại tuyến, chạy `py tools/build_offline.py` rồi thêm `CHOI-GAME.html` vào commit. Bản web chỉ phát hành nội dung `dist/`.
@@ -51,7 +51,7 @@ Nếu bắt đầu từ một repository trống trên GitHub, mở PowerShell �
 
 ```powershell
 git init -b main
-git add README.md art dist tools CHOI-GAME.html .github .gitignore .gitattributes
+git add README.md art dist tools CHOI-GAME.html .gitignore .gitattributes
 git commit -m "Import Veins of Mud web game"
 git remote add origin https://github.com/USERNAME/REPOSITORY.git
 git push -u origin main
